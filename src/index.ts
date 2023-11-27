@@ -34,7 +34,7 @@ const io = new Server(server, {
     allowEIO3: true,
     cors: {
       origin: "https://excalidraw.example.org",
-      allowedHeaders: ["*"],
+      allowedHeaders: ["Content-Type", "Authorization"],
       credentials: true
     }
   });
