@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
-import * as prometheus from 'socket.io-prometheus-metrics';
+//import * as prometheus from 'socket.io-prometheus-metrics';
 
 const serverDebug = debug('server');
 const ioDebug = debug('io');
@@ -30,12 +30,36 @@ server.listen(port, () => {
     serverDebug(`listening on port: ${port}`);
 });
 
-const io = new Server(server);
+const io = new Server(server, {
+    allowEIO3: true,
+    cors: {
+      origin: "https://excalidraw.example.org",
+      allowedHeaders: ["*"],
+      credentials: true
+    }
+  });
+
+
+
+// {
+//     handlePreflightRequest: (req, res) => {
+//         const headers = {
+//             'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+//             'Access-Control-Allow-Origin': req.header?.origin ?? 'https://meet.jit.si',
+//             'Access-Control-Allow-Credentials': true
+//         };
+//
+//         res.writeHead(200, headers);
+//         res.end();
+//     },
+//     maxHttpBufferSize: 10e6,
+//     pingTimeout: 10000
+// });
 
 // listens on host:9090/metrics
-prometheus.metrics(io, {
-    collectDefaultMetrics: true
-});
+// prometheus.metrics(io, {
+//     collectDefaultMetrics: true
+// });
 
 io.on('connection', socket => {
     ioDebug('connection established!');
